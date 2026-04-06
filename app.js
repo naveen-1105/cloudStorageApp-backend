@@ -26,6 +26,9 @@ app.use(cors(
   }
 ));
 
+app.get("/",(req,res) => {
+  res.json({message: "hello now u r at storageApp"})
+})
 app.use("/directory",CheckAuth, directoryRoutes);
 app.use("/file",CheckAuth, fileRoutes);
 app.use("/auth", authRoutes);
