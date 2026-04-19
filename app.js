@@ -8,23 +8,36 @@ import cookieParser from "cookie-parser"
 import CheckAuth from "./Middleware/auth.js";
 import { connectDB } from "./Middleware/db.js";
 import redisClient from "./util/redis.js";
+import dotenv from "dotenv"
+dotenv.config()
 import helmet from "helmet";
 
-const secretkey = "navwifi13";
+
 try {
   connectDB();
 
   const app = express();
   await redisClient.connect()
 
-// app.use(helmet())
+app.use(helmet())
 app.use(express.json());
-app.use(cookieParser(secretkey))
-app.use(cors(
-  {origin: "http://localhost:5173",
-    credentials: true
-  }
-));
+app.use(cookieParser(process.env.secretkey_cookieParser))
+
+const allowedOrigins = process.env.CLIENT_URL
+  .split(',')
+  .map(origin => origin.trim());
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // allow requests with no origin (Postman, mobile apps)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
+}));
 
 app.get("/",(req,res) => {
   res.json({message: "hello now u r at storageApp"})

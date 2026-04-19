@@ -104,12 +104,12 @@ export const deleteDir = async (req, res, next) => {
     const {files , directories} = await getDirectoryContents(id)
 
     const keys = files.map((file) => ({ Key: `uploads/${file._id}${file.extension}` }));
-    console.log("keys:", keys);
     // for(const {_id,extension} of files){
     //   await rm(`${import.meta.dirname}/../storage/${_id.toString()}${extension}`)
     // }
-    const response = await deleteS3MultipleFile(keys)
-    console.log(response);
+    if(keys.length > 0){
+      const response = await deleteS3MultipleFile(keys)
+    }
     let newParentDirId = directory.parentDirId;
     while(newParentDirId){
       const newParentDir = await Directory.findOne({_id: newParentDirId})

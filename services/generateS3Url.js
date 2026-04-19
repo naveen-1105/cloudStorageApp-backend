@@ -20,7 +20,7 @@ export const generateSignedPutUrl = async({ fileName, fileType }) => {
     return url;
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Error generating URL" });
+    throw new Error("Error generating URL");
   }
 }
 
@@ -39,7 +39,7 @@ export const generateSignedGetUrl = async({fileId,download = false,filename}) =>
     return url;
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Error generating URL" });
+    throw new Error("Error generating URL");
   }
 }
 
@@ -55,7 +55,7 @@ export const getS3FileMetaData = async(key) => {
     return response;
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Error generating URL" });
+    throw new Error("Error generating URL");
   }
 }
 
@@ -71,7 +71,7 @@ export const deleteS3File = async(key) => {
     return response;
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Cannot delete your file from cloud" });
+    throw new Error("Cannot delete your file from cloud");
   }
 }
 export const deleteS3MultipleFile = async(keys) => {
@@ -88,7 +88,7 @@ export const deleteS3MultipleFile = async(keys) => {
     return response;
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Cannot delete your files from cloud" });
+    throw new Error("Cannot delete your files from cloud");
   }
 }
 

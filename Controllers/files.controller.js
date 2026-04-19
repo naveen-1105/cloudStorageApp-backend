@@ -152,6 +152,7 @@ export const s3UploadInitiate = async (req,res,next) => {
   
       res.status(201).json({fileId: fileData._id,url: url});
     } catch (error) {
+      
       console.log(error);
       next();
     }
