@@ -3,7 +3,13 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import dotenv from "dotenv"
 dotenv.config()
 
-const s3 = new S3Client({});
+const s3 = new S3Client({
+	region: 'ap-south-1',
+	credentials:{
+		accessKeyId:process.env.aws_access_key_id,
+		secretAccessKey: process.env.aws_secret_access_key,
+	},
+});
 console.log(process.env.s3_bucket_name);
 export const generateSignedPutUrl = async({ fileName, fileType }) => {
   try {

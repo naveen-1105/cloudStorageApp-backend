@@ -12,6 +12,9 @@ import dotenv from "dotenv"
 dotenv.config()
 import helmet from "helmet";
 import {spawn} from "child_process"
+import dotenv from "dotenv"
+dotenv.config()
+
 
 try {
   connectDB();
