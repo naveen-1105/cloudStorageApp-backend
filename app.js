@@ -44,21 +44,25 @@ app.post("/github-webhooks",(req,res) => {
   const bashChildProcess = spawn("bash",["/home/ubuntu/cloudStorageApp-frontend/deploy.sh"])
   console.log(req.header);
   console.log(req.body);
-  bashChildProcess.stdout.on("data", (data) => {
-    process.stdout.write(data);
-  })
-
-  bashChildProcess.on("close",(code) => {
-    if(code === 0){
-      console.log("Script executed sucessfully!");
-    }else{
-      console.log("script failed");
-    }
-  })
-
-  bashChildProcess.on('error',(err) => {
-    console.log(err);
-  })
+  try {
+    bashChildProcess.stdout.on("data", (data) => {
+      process.stdout.write(data);
+    })
+  
+    bashChildProcess.on("close",(code) => {
+      if(code === 0){
+        console.log("Script executed sucessfully!");
+      }else{
+        console.log("script failed");
+      }
+    })
+  
+    bashChildProcess.on('error',(err) => {
+      console.log(err);
+    })
+  } catch (error) {
+    console.log(error);
+  }
   res.json({message: "OK"})
 })
 
