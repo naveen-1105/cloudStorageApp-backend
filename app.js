@@ -11,7 +11,7 @@ import redisClient from "./util/redis.js";
 import dotenv from "dotenv"
 dotenv.config()
 import helmet from "helmet";
-
+import {spawn} from "child_process"
 
 try {
   connectDB();
@@ -23,7 +23,7 @@ app.use(helmet())
 app.use(express.json());
 app.use(cookieParser(process.env.secretkey_cookieParser))
 
-const allowedOrigins = process.env.CLIENT_URL
+const allowedOrigins = process.env.client_url
   .split(',')
   .map(origin => origin.trim());
 
@@ -38,6 +38,27 @@ app.use(cors({
   },
   credentials: true
 }));
+
+app.post("/github-webhooks",(req,res) => {
+  const bashChildProcess = spawn("bash",["/home/ubuntu/cloudStorageApp-frontend/deploy.sh"])
+
+  bashChildProcess.stdout.on("data", (data) => {
+    process.stdout.write(data);
+  })
+
+  bashChildProcess.on("close",(code) => {
+    if(code === 0){
+      console.log("Script executed sucessfully!");
+    }else{
+      console.log("script failed");
+    }
+  })
+
+  bashChildProcess.on('error',(err) => {
+    console.log(err);
+  })
+  res.json({message: "OK"})
+})
 
 app.get("/",(req,res) => {
   res.json({message: "hello now u r at storageApp"})
