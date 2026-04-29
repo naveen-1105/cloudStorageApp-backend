@@ -42,7 +42,8 @@ app.use(cors({
 
 app.post("/github-webhooks",(req,res) => {
   const bashChildProcess = spawn("bash",["/home/ubuntu/cloudStorageApp-frontend/deploy.sh"])
-
+  console.log(req.header);
+  console.log(req.body);
   bashChildProcess.stdout.on("data", (data) => {
     process.stdout.write(data);
   })
