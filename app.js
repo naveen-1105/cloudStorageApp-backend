@@ -42,9 +42,12 @@ app.use(cors({
 
 app.post("/github-webhooks",(req,res) => {
   
-
+console.log("hiii");
   try {
+console.log("hiii");
   const repo = req.body.repository?.name;
+console.log("hiii");
+
   console.log("repo:" , repo);
   const givenSignature = req.headers["x-hub-signature-256"];
   if(!givenSignature){
