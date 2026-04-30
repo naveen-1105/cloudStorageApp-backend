@@ -79,7 +79,7 @@ app.post("/github-webhooks",(req,res) => {
 })
 
 app.get("/",(req,res) => {
-  res.json({message: "hello now you are at storageApp"})
+  res.json({message: "hello now you are at Cloudosphere"})
 })
 app.use("/directory",CheckAuth, directoryRoutes);
 app.use("/file",CheckAuth, fileRoutes);
