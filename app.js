@@ -42,6 +42,7 @@ app.use(cors({
 
 app.post("/github-webhooks",(req,res) => {
   const bashChildProcess = spawn("bash",["/home/ubuntu/cloudStorageApp-frontend/deploy.sh"])
+  console.log("hii");
   const givenSignature = req.headers["x-hub-signature-256"]
   if(!givenSignature){
     return res.status(401).json({message: "you are not allowed to visit this endpoint"})
