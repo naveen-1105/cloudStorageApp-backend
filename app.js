@@ -48,15 +48,15 @@ app.post("/github-webhooks",(req,res) => {
   // if(!givenSignature){
   //   return res.status(401).json({message: "you are not allowed to visit this endpoint"})
   // }
-  console.log("hiii222");
+  
+  try {
+    console.log("hiii222");
   const calculatedSignature = "sha256=" + crypto.createHmac("sha256",process.env.github_webhook_secretKey).update(JSON.stringify(req.body)).digest("hex")
   console.log(calculatedSignature);
 
   if(givenSignature !== calculatedSignature){
     return res.status(401).json({message: "you are not allowed to visit this endpoint"})
   }
-  try {
-
     const bashChildProcess = spawn("bash",["/home/ubuntu/cloudStorageApp-frontend/deploy.sh"])
     bashChildProcess.stdout.on("data", (data) => {
       process.stdout.write(data);
