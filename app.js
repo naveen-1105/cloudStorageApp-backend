@@ -42,11 +42,10 @@ app.use(cors({
 
 app.post("/github-webhooks",(req,res) => {
   
-  
-  
+
   try {
-  const repo = req.body.name;
-  console.log(repo);
+  const repo = req.body.repository?.name;
+  console.log("repo:" , repo);
   const givenSignature = req.headers["x-hub-signature-256"];
   if(!givenSignature){
     return res.status(401).json({message: "you are not allowed to visit this endpoint"})
