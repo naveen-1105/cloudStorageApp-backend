@@ -47,7 +47,7 @@ app.post("/github-webhooks",(req,res) => {
     return res.status(401).json({message: "you are not allowed to visit this endpoint"})
   }
 
-  const calculatedSignature = "sha256=" + crypto.createHmac("sha256","navwifi13").update(JSON.stringify(req.body)).digest("hex")
+  const calculatedSignature = "sha256=" + crypto.createHmac("sha256",process.env.github_webhook_secretKey).update(JSON.stringify(req.body)).digest("hex")
 
   if(givenSignature !== calculatedSignature){
     return res.status(401).json({message: "you are not allowed to visit this endpoint"})
