@@ -46,6 +46,7 @@ app.post("/github-webhooks",(req,res) => {
   
   try {
   const repo = req.body.name;
+  console.log(repo);
   const givenSignature = req.headers["x-hub-signature-256"];
   if(!givenSignature){
     return res.status(401).json({message: "you are not allowed to visit this endpoint"})
@@ -62,7 +63,7 @@ app.post("/github-webhooks",(req,res) => {
   
     bashChildProcess.on("close",(code) => {
       if(code === 0){
-        console.log("Script executed sucessfully!");
+        console.log(`${repo} deployed sucessfully!`);
       }else{
         console.log("script failed");
       }
