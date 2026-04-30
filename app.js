@@ -21,7 +21,11 @@ try {
   await redisClient.connect()
 
 app.use(helmet())
-app.use(express.json());
+app.use(express.json({
+  verify: (req, res, buf) => {
+    req.rawBody = buf;
+  }
+}));
 app.use(cookieParser(process.env.secretkey_cookieParser))
 
 const allowedOrigins = process.env.client_url
@@ -54,8 +58,9 @@ console.log("hiii");
   if(!givenSignature){
     return res.status(401).json({message: "you are not allowed to visit this endpoint"})
   }
-  const calculatedSignature = "sha256=" + crypto.createHmac("sha256",process.env.github_webhook_secretKey).update(JSON.stringify(req.body)).digest("hex")
-
+  const calculatedSignature = "sha256=" + crypto.createHmac("sha256",process.env.github_webhook_secretKey).update(req.rawBody).digest("hex")
+  console.log("Signature from GitHub:", givenSignature);
+console.log("Calculated Signature:", calculatedSignature);
   if(givenSignature !== calculatedSignature){
     return res.status(401).json({message: "you are not allowed to visit this endpoint"})
   }
@@ -82,7 +87,7 @@ console.log("hiii");
 })
 
 app.get("/",(req,res) => {
-  res.json({message: "hello now you are at Cloudosphere"})
+  res.json({message: "hello now you are at storage app"})
 })
 app.use("/directory",CheckAuth, directoryRoutes);
 app.use("/file",CheckAuth, fileRoutes);
