@@ -12,7 +12,7 @@ import dotenv from "dotenv"
 dotenv.config()
 import helmet from "helmet";
 import {spawn} from "child_process"
-
+import crypto from "crypto"
 
 try {
   connectDB();
@@ -42,8 +42,16 @@ app.use(cors({
 
 app.post("/github-webhooks",(req,res) => {
   const bashChildProcess = spawn("bash",["/home/ubuntu/cloudStorageApp-frontend/deploy.sh"])
-  console.log(req.header);
-  console.log(req.body);
+  const givenSignature = req.headers["x-hub-signature-256"]
+  if(!givenSignature){
+    return res.status(401).json({message: "you are not allowed to visit this endpoint"})
+  }
+
+  const calculatedSignature = "sha256=" + crypto.createHmac("sha256","navwifi13").update(JSON.stringify(req.body)).digest("hex")
+
+  if(givenSignature !== calculatedSignature){
+    return res.status(401).json({message: "you are not allowed to visit this endpoint"})
+  }
   try {
     bashChildProcess.stdout.on("data", (data) => {
       process.stdout.write(data);
