@@ -44,6 +44,7 @@ app.post("/github-webhooks",(req,res) => {
   
 console.log("hiii");
   try {
+    console.log(req.body);
 console.log("hiii");
   const repo = req.body.repository?.name;
 console.log("hiii");
