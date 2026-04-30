@@ -87,7 +87,7 @@ console.log("Calculated Signature:", calculatedSignature);
 })
 
 app.get("/",(req,res) => {
-  res.json({message: "hello now you are at storage app"})
+  res.json({message: "hello now you are at cloudosphere"})
 })
 app.use("/directory",CheckAuth, directoryRoutes);
 app.use("/file",CheckAuth, fileRoutes);
